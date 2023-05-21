@@ -1,0 +1,81 @@
+version: '3'
+name: 'pcq2'
+
+volumes:
+  pcq2_sticker_database_data: {}
+  pcq2_search_database_data: {}
+
+services:
+  sticker_service:
+    build:
+      context: ./
+      dockerfile: docker/service/Dockerfile
+    image: krazydocker/pcq2-sticker-service:latest
+    container_name: pcq2_service_api
+    platform: linux/x86_64
+#    depends_on:
+#      - sticker_db
+    volumes:
+      - ./StickerService:/code/app
+    environment:
+      - DB_HOST=${STICKER_DB_HOST}
+      - DB_PORT=${STICKER_DB_PORT}
+      - DB_NAME=${STICKER_DB_NAME}
+      - DB_USER=${STICKER_DB_USER}
+      - DB_PASSWORD=${STICKER_DB_PASSWORD}
+    ports:
+      - "8000:8000"
+
+#  sticker_db:
+#    build:
+#      context: docker/database/
+#      dockerfile: Dockerfile
+#    image: krazydocker/pcq2-sticker-database:latest
+#    container_name: pcq2_sticker_database
+#    volumes:
+#      - pcq2_sticker_database_data:/var/lib/postgresql/data
+#    environment:
+#      - DB_NAME=${STICKER_DB_NAME}
+#      - DB_USER=${STICKER_DB_USER}
+#      - DB_PASSWORD=${STICKER_DB_PASSWORD}
+#      - POSTGRES_PASSWORD=${STICKER_POSTGRES_PASSWORD}
+#    restart: always
+#    ports:
+#      - ${STICKER_DB_PORT}:${STICKER_DB_PORT}
+
+  search_service:
+    build:
+      context: ./
+      dockerfile: docker/model/Dockerfile
+    image: krazydocker/pcq2-search-service:latest
+    container_name: pcq2_search_service
+    platform: linux/x86_64
+#    depends_on:
+#      - search_db
+    volumes:
+      - ./SearchService:/code/app
+    environment:
+      - DB_HOST=${SEARCH_DB_HOST}
+      - DB_PORT=${SEARCH_DB_PORT}
+      - DB_NAME=${SEARCH_DB_NAME}
+      - DB_USER=${SEARCH_DB_USER}
+      - DB_PASSWORD=${SEARCH_DB_PASSWORD}
+    ports:
+      - "8118:8118"
+
+#  search_db:
+#    build:
+#      context: docker/database/
+#      dockerfile: Dockerfile
+#    image: krazydocker/pcq2-search-database:latest
+#    container_name: pcq2_search_database
+#    volumes:
+#      - pcq2_search_database_data:/var/lib/postgresql/data
+#    environment:
+#      - DB_NAME=${DB_NAME}
+#      - DB_USER=${DB_USER}
+#      - DB_PASSWORD=${DB_PASSWORD}
+#      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+#    restart: always
+#    ports:
+#      - ${DB_PORT}:${DB_PORT}

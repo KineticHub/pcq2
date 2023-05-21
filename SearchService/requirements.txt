@@ -1,0 +1,24 @@
+# Django
+django==4.2.1  # https://github.com/django/django
+django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
+
+# Django REST Framework
+djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
+django-cors-headers==4.0.0  # https://github.com/adamchainz/django-cors-headers
+markdown==3.4.3  # https://github.com/Python-Markdown/markdown
+django-filter==23.2  # https://github.com/carltongibson/django-filter
+
+# Web Server
+uvicorn[standard]==0.22.0  # https://github.com/encode/uvicorn
+
+# ML Model
+openai-clip==1.0.1
+torch==2.0.1  # https://pytorch.org/
+torchvision==0.15.2  # https://github.com/pytorch/vision
+ftfy==6.1.1
+regex==2023.5.5  # https://github.com/mrabarnett/mrab-regex
+tqdm==4.65.0  # https://github.com/tqdm/tqdm
+
+# Testing - could separate this later
+factory-boy==3.2.1  # https://github.com/FactoryBoy/factory_boy
+faker==18.9.0  # https://github.com/joke2k/faker
