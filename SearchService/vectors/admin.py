@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from vectors.models import ImageVector
+
+
+@admin.register(ImageVector)
+class ImageVectorAdmin(admin.ModelAdmin):
+    list_display = ["filename"]

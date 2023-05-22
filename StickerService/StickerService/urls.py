@@ -15,8 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
+from counter.api import DigitCounterView
 from stickers.api import StickersSearchView, StickersFeedbackView, StickersStatisticsView
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
     path('api/search/', StickersSearchView.as_view(), name='stickers_search'),
     path('api/feedback/', StickersFeedbackView.as_view(), name='stickers_feedback'),
     path('api/analytics/', StickersStatisticsView.as_view(), name='stickers_query_stats'),
+    path('api/counter/', DigitCounterView.as_view(), name='counters_digit_counter'),
 ]

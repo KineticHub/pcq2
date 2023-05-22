@@ -13,9 +13,10 @@ class VectorsApiTests(APITestCase):
     @patch('vectors.api.ImageSearch')
     @patch('vectors.api.ImageVector.objects.values_list')
     @patch('vectors.api.torch')
-    def test_SearchImageVectors(self, torch_mock, ImageVector_values_list_mock, ImageSearch_mock):
+    def test_SearchImageVectors(self, torch_mock, image_vector_values_list_mock, image_search_mock):
         """
-        Ensure we can create a new account object.
+        Test to make sure we are making the expected calls to various functions, and are returning the
+        data as expected.
         """
 
         query = 'cat'
@@ -31,10 +32,10 @@ class VectorsApiTests(APITestCase):
 
         url = reverse('search_image_vectors') + '?query=' + query
 
-        ImageVector_values_list_mock.side_effect = values_list_returns
+        image_vector_values_list_mock.side_effect = values_list_returns
         search_instance = MagicMock()
         search_instance.get_scores.return_value = fake_scores
-        ImageSearch_mock.return_value = search_instance
+        image_search_mock.return_value = search_instance
 
         response = self.client.get(url, format='json')
 
@@ -45,10 +46,10 @@ class VectorsApiTests(APITestCase):
         self.assertTrue(torch_mock.load.called)
         self.assertTrue(torch_mock.Size.called)
 
-        self.assertTrue(ImageSearch_mock.called)
+        self.assertTrue(image_search_mock.called)
 
-        self.assertEqual(ImageVector_values_list_mock.call_count, 2)
-        ImageVector_values_list_mock.assert_has_calls([
+        self.assertEqual(image_vector_values_list_mock.call_count, 2)
+        image_vector_values_list_mock.assert_has_calls([
             call('tensor_blob', flat=True),
             call('filename', flat=True)
         ])

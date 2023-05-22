@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 
-from vectors.algos import ImageSearch
+from vectors.algos.ImageVectorTextSearch import ImageSearch
 from vectors.models import ImageVector
 
 
