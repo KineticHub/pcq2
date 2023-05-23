@@ -23,6 +23,8 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#design-choices">Design Choices</a></li>
+        <li><a href="#design-choices-drawbacks">Design Choices Drawbacks</a></li>
       </ul>
     </li>
     <li>
@@ -33,6 +35,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#cloud-architecture">Cloud Architecture</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -144,10 +147,10 @@ Authorization section of the statistics request as well.
 
 
 <!-- ARCHITECTURE SAMPLE -->
-## Simple Architecture
+## Cloud Architecture
 <img src="assets/images/pcq2-simple-cloud-architecture.jpg" alt="Logo" width="600" height="400">
 
-With whatis currently built, a very simple **_starting_** architecture would look something like this,
+With whatis currently built, a **_very simple starting architecture_** would look something like this,
 where we have the following:
 * Bucket: This is to store our model file, images, and any other staticfiles or media we want to keep around.
 * Databases: Each service would have a database that only it has access to.
