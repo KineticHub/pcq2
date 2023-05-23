@@ -1,0 +1,41 @@
+#!/bin/bash
+
+python << END
+import sys
+import time
+import os
+
+import psycopg2
+
+suggest_unrecoverable_after = 30
+start = time.time()
+
+while True:
+    try:
+        conn = psycopg2.connect(dbname="$DB_NAME", user="$DB_USER", password="$DB_PASSWORD", host="$DB_HOST")
+        break
+    except psycopg2.OperationalError as error:
+        sys.stderr.write("Waiting for PostgreSQL to become available...\n")
+
+        if time.time() - start > suggest_unrecoverable_after:
+            sys.stderr.write("  This is taking longer than expected. The following exception may be indicative of an unrecoverable error: '{}'\n".format(error))
+
+    time.sleep(1)
+END
+
+>&2 echo 'PostgreSQL is available'
+
+python manage.py migrate
+python manage.py collectstatic --no-input
+:'
+Below is an ugly hack, because the process kept getting killed. I slowed it down,
+tried manual garbage collection, and the CPU went from >300% to ~40%, and memory usage
+went from ~8GB to ~.7GB, but still saw the process getting killed. In the end, since
+this is a one-off script and idempotent, I added the process multiple times to ensure
+all images were processed. This could definitely be improved upon.
+'
+python manage.py processimages
+python manage.py processimages
+python manage.py processimages
+python manage.py processimages
+/usr/local/bin/uvicorn SearchService.asgi:application --host 0.0.0.0 --port 8080

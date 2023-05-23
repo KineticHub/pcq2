@@ -1,0 +1,31 @@
+#!/bin/bash
+
+python << END
+import sys
+import time
+import os
+
+import psycopg2
+
+suggest_unrecoverable_after = 30
+start = time.time()
+
+while True:
+    try:
+        conn = psycopg2.connect(dbname="$DB_NAME", user="$DB_USER", password="$DB_PASSWORD", host="$DB_HOST")
+        break
+    except psycopg2.OperationalError as error:
+        sys.stderr.write("Waiting for PostgreSQL to become available...\n")
+
+        if time.time() - start > suggest_unrecoverable_after:
+            sys.stderr.write("  This is taking longer than expected. The following exception may be indicative of an unrecoverable error: '{}'\n".format(error))
+
+    time.sleep(1)
+END
+
+>&2 echo 'PostgreSQL is available'
+
+python manage.py migrate
+python manage.py collectstatic --no-input
+python manage.py savestickers
+/usr/local/bin/uvicorn StickerService.asgi:application --host 0.0.0.0 --port 8080

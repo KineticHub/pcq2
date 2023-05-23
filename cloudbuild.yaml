@@ -1,0 +1,22 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [ '-c', 'docker pull gcr.io/piccollage/pcq2-search-service:latest || exit 0' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'gcr.io/piccollage/pcq2-search-service:latest',
+      '--cache-from', 'gcr.io/piccollage/pcq2-search-service:latest',
+      './SearchService/'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [ '-c', 'docker pull gcr.io/piccollage/pcq2-sticker-service:latest || exit 0' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'gcr.io/piccollage/pcq2-sticker-service:latest',
+      '--cache-from', 'gcr.io/piccollage/pcq2-sticker-service:latest',
+      './StickerService/'
+    ]
+images: [ 'gcr.io/piccollage/pcq2-search-service:latest', 'gcr.io/piccollage/pcq2-sticker-service:latest' ]
