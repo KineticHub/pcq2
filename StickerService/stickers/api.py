@@ -21,6 +21,10 @@ class StickersSearchView(APIView):
     @staticmethod
     def get(request):
         query = request.query_params.get('query')
+        if not query:
+            return Response({"message": "Please provide a query."})
+        if len(query) > 255:
+            return Response({"message": "Query is too long."})
         query_mod, _ = StickerQuery.objects.get_or_create(query=request.query_params.get('query'))
         query_mod.usage = F('usage') + 1
         query_mod.save()

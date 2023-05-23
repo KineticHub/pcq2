@@ -173,6 +173,10 @@ Authorization section of the statistics request as well.
    ```sh
    http://localhost:8000/api/counter/?digit=7&n=1000
    ```
+* An admin interface for database models from Django
+   ```sh
+   http://localhost:8000/admin/
+   ```
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

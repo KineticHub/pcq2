@@ -1,13 +1,11 @@
 import json
-import struct
-from io import BytesIO
 
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from unittest.mock import patch, MagicMock, call, PropertyMock
+from unittest.mock import patch
 
-from stickers.models import StickerQuery, StickerQueryScore
+from stickers.models import StickerQueryScore
 from stickers.tests.factories import StickerFactory, StickerQueryFactory, UserFactory, TokenFactory
 
 
@@ -36,6 +34,37 @@ class StickersApiTests(APITestCase):
         self.assertEqual(sticker_query_obj.usage, 1)
 
         search_service_mock.get_images_for_query.assert_called_once_with(sticker_query_obj.query)
+
+    def test_StickersSearch_search_no_query(self):
+        """
+        Search needs to have a query to be valid.
+        """
+
+        sticker_query_obj = StickerQueryFactory()
+
+        url = reverse('stickers_search') + '?query='
+
+        response = self.client.get(url, format='json')
+        self.assertTrue("provide" in json.loads(response.content)['message'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        sticker_query_obj.refresh_from_db()
+        self.assertEqual(sticker_query_obj.usage, 0)
+
+    def test_StickersSearch_search_query_too_long(self):
+        """
+        Query cannot be more than 255 characters.
+        """
+        sticker_query_obj = StickerQueryFactory(query=''.join("_" for _ in range(256)))
+
+        url = reverse('stickers_search') + '?query=' + sticker_query_obj.query
+
+        response = self.client.get(url, format='json')
+        self.assertTrue("long" in json.loads(response.content)['message'])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        sticker_query_obj.refresh_from_db()
+        self.assertEqual(sticker_query_obj.usage, 0)
 
     def test_StickersFeedback_single_query_and_stickers(self):
         """
