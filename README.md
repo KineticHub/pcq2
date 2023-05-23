@@ -164,11 +164,16 @@ Authorization section of the statistics request as well.
     ]
   }
    ```
-* An API to download this feedback (can be accessed only by the ML team)
+* An API to download this feedback (can be accessed only by the ML team) 
+(this requires an Authorization Token associated to an admin user)
    ```sh
-   http://0.0.0.0:8000/api/analytics/?query=cat+in+a+park
+   http://localhost:8000/api/analytics/?query=cat+in+a+park
+   ``` 
+* An API to count the number of times a digit appears from 1 to N
+   ```sh
+   http://localhost:8000/api/counter/?digit=7&n=1000
    ```
-  Note: This requires an Authorization Token associated to an admin user. 
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
