@@ -116,6 +116,7 @@ Please follow the links below for instructions on installation.
 
 Everything to get the project up and running locally is included in the Docker Compose and associated Docker files.
 Please note that the initial run will take some time, as it downloads necessary files and does image processing.
+If you attempt to use an API and get a connection error, be sure that the service is up and running in the container.
 
 1. Clone the repo
    ```sh
