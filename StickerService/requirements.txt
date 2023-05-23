@@ -22,3 +22,6 @@ faker==18.9.0  # https://github.com/joke2k/faker
 
 # Database connector
 psycopg2==2.9.6  # https://github.com/psycopg/psycopg2
+
+# Redis support
+django-redis==5.2.0  # https://github.com/jazzband/django-redis

@@ -26,6 +26,8 @@ services:
       - ADMIN_USERNAME=${ADMIN_USERNAME}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - ADMIN_TOKEN=${ADMIN_TOKEN}
+      - REDIS_HOST=${STICKER_REDIS_HOST}
+      - REDIS_PORT=${STICKER_REDIS_PORT}
     ports:
       - "8000:8080"
 
@@ -46,6 +48,9 @@ services:
     ports:
       - "5432:${STICKER_DB_PORT}"
 
+  sticker_cache:
+    image: redis:6
+    container_name: pcq2_sticker_cache
 
   search_service:
     build:
