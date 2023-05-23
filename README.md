@@ -42,8 +42,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 This project is intended for internal review at PicCollage only as a project to evaluate a potential candidate.
 The project is not production-ready as-is.
 
@@ -144,6 +142,25 @@ Authorization section of the statistics request as well.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
+<!-- ARCHITECTURE SAMPLE -->
+## Simple Architecture
+<img src="assets/images/pcq2-simple-cloud-architecture.jpg" alt="Logo" width="600" height="400">
+
+With whatis currently built, a very simple **_starting_** architecture would look something like this,
+where we have the following:
+* Bucket: This is to store our model file, images, and any other staticfiles or media we want to keep around.
+* Databases: Each service would have a database that only it has access to.
+* Secret Manager: We would store production secrets in the secret manager and use them to populate the environment,
+replacing our `.env` file setup we use locally.
+* Load Balancers: Depending on traffic, a good initial setup should include load balancing, one for external 
+customer calls to come into our StickerService, and an internal one for StickerService to talk to SearchService.
+* Gateway: The gateway allows public traffic into our private network.
+* Compute Instances: These are instances that are running our containers, and should be auto scalable depending
+on the traffic load.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- CONTACT -->
 ## Contact
 
@@ -157,7 +174,6 @@ Project Link: [https://github.com/kinetichub/pcq2](https://github.com/kinetichub
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[product-screenshot]: images/screenshot.png
 [Django]: https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white
 [Django-url]: https://www.djangoproject.com/
 [Docker]: https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white
