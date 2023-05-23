@@ -39,21 +39,30 @@ class StickersFeedbackView(APIView):
     @staticmethod
     def post(request):
         feedbacks = request.data['feedback']
+        failed = []
         for fb in feedbacks:
+            if not StickerQuery.objects.filter(query=fb['query']).exists():
+                return Response({"message": "Query not found."})
             query_mod = StickerQuery.objects.get(query=fb['query'])
             for item in fb['positive']:
+                if not Sticker.objects.filter(filename=item).exists():
+                    failed.append(item)
+                    continue
                 sticker_mod = Sticker.objects.get(filename=item)
                 feedback_mod, _ = StickerQueryScore.objects\
                     .get_or_create(sticker=sticker_mod, query=query_mod)
                 feedback_mod.positives = F('positives') + 1
                 feedback_mod.save()
             for item in fb['negative']:
+                if not Sticker.objects.filter(filename=item).exists():
+                    failed.append(item)
+                    continue
                 sticker_mod = Sticker.objects.get(filename=item)
                 feedback_mod, _ = StickerQueryScore.objects \
                     .get_or_create(sticker=sticker_mod, query=query_mod)
                 feedback_mod.negatives = F('negatives') + 1
                 feedback_mod.save()
-        return Response({"status": "success"})
+        return Response({"failed": failed})
 
 
 class StickersStatisticsView(APIView):
@@ -67,6 +76,9 @@ class StickersStatisticsView(APIView):
     @staticmethod
     def get(request):
         query = request.query_params.get('query')
+
+        if not StickerQuery.objects.filter(query=query).exists():
+            return Response({"message": "Query not found."})
 
         query_mod = StickerQuery.objects.get(query=query)
         query_ser = StickerQuerySerializer(query_mod)

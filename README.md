@@ -139,9 +139,36 @@ Please note that the initial run will take some time, as it downloads necessary 
 
 Once the services are running, you can call the endpoints by hitting `http://localhost:8000/` endpoints.
 Under the assets folder, I have included a [Postman](https://www.postman.com/api-platform/api-client/) JSON file. 
-These calls should also work out-of-the-box coupled with the default `.env` file provided. 
+
+These Postman calls should also work out-of-the-box coupled with the default `.env` file provided. 
 Note that if the token is changed in the `.env` file, then the token will need to be updated in the 
 Authorization section of the statistics request as well.
+
+* An API to search for a term (can be accessed by any user)
+   ```sh
+   http://localhost:8000/api/search/?query=cat+in+a+park
+   ```
+* An API to report one or more stickers (can be accessed by any user)
+  ```sh
+   http://localhost:8000/api/feedback/
+   ```
+  An example body might be:
+  ```sh
+   {
+    "feedback": [
+        {
+            "query": "cat in a park",
+            "positive": ["COCO_val2014_000000004212.jpg", "COCO_val2014_000000001675.jpg"],
+            "negative": ["COCO_val2014_000000002154.jpg", "COCO_val2014_000000000400.jpg", "COCO_val2014_000000003711.jpg"]
+        }
+    ]
+  }
+   ```
+* An API to download this feedback (can be accessed only by the ML team)
+   ```sh
+   http://0.0.0.0:8000/api/analytics/?query=cat+in+a+park
+   ```
+  Note: This requires an Authorization Token associated to an admin user. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
