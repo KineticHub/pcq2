@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/kinetichub/pcq2">
-    <img src="assets/images/piccollage.webp" alt="Logo" width="80" height="80">
+    <img src="assets/images/piccollage.webp" alt="Logo" width="140" height="140">
   </a>
 
 <h3 align="center">PicCollage Take Home Project</h3>
