@@ -98,6 +98,56 @@ class StickersApiTests(APITestCase):
         self.assertEqual(StickerQueryScore.objects.filter(query=sticker_query_objs[0], positives=1).count(), 2)
         self.assertEqual(StickerQueryScore.objects.filter(query=sticker_query_objs[1], negatives=1).count(), 2)
 
+    def test_StickersFeedback_bad_query(self):
+        """
+        Return a query not found message when attempting to provide feedback for a query that was never used.
+        """
+
+        sticker_objs = StickerFactory.create_batch(2)
+
+        feedback = {
+            "feedback": [
+                {
+                    "query": "bad_query",
+                    "positive": [sticker_objs[0].filename],
+                    "negative": [sticker_objs[1].filename]
+                }
+            ]
+        }
+        url = reverse('stickers_feedback')
+
+        response = self.client.post(url, data=feedback, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue("not found" in json.loads(response.content)['message'].lower())
+
+        self.assertTrue(StickerQueryScore.objects.count() == 0)
+
+    def test_StickersFeedback_bad_image(self):
+        """
+        Check that we return a list of failed images, but save the correct ones.
+        """
+
+        sticker_objs = StickerFactory.create_batch(2)
+        sticker_query_obj = StickerQueryFactory()
+        bad_image = "bad_image_filename"
+
+        feedback = {
+            "feedback": [
+                {
+                    "query": sticker_query_obj.query,
+                    "positive": [sticker_objs[0].filename, bad_image],
+                    "negative": [sticker_objs[1].filename]
+                }
+            ]
+        }
+        url = reverse('stickers_feedback')
+
+        response = self.client.post(url, data=feedback, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(response.content)['failed'], [bad_image])
+
+        self.assertTrue(StickerQueryScore.objects.count() == 2)
+
     def test_StickersStatistics_unauthenticated(self):
         """
         Anonymous users should not be able to access statistics.
@@ -151,3 +201,20 @@ class StickersApiTests(APITestCase):
         headers = {"Authorization": f"Token {token.key}"}
         response = self.client.get(url, format='json', headers=headers)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_StickersStatistics_bad_query(self):
+        """
+        If trying to get statistics for a query that was not used, return not found.
+        """
+
+        bad_query = "bad_query"
+
+        url = reverse('stickers_query_stats') + '?query=' + bad_query
+
+        user = UserFactory(is_staff=True)
+        token = TokenFactory(user=user)
+
+        headers = {"Authorization": f"Token {token.key}"}
+        response = self.client.get(url, format='json', headers=headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue("not found" in json.loads(response.content)['message'].lower())
