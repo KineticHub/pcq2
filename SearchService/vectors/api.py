@@ -11,13 +11,13 @@ from vectors.models import ImageVector
 
 class SearchImageVectors(APIView):
     """
+    Take a query and search our image vectors by transforming the query words into lookup vectors.
+    Returns the top ten scoring images.
     """
     permission_classes = [permissions.AllowAny]
 
     @staticmethod
     def get(request):
-        """
-        """
         vectors = torch.cat([torch.load(BytesIO(vector)).view(torch.Size([512])).unsqueeze(0)
                              for vector in ImageVector.objects.values_list('tensor_blob', flat=True)])
         filenames = ImageVector.objects.values_list('filename', flat=True)

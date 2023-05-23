@@ -27,13 +27,13 @@ END
 
 python manage.py migrate
 python manage.py collectstatic --no-input
-:'
-Below is an ugly hack, because the process kept getting killed. I slowed it down,
-tried manual garbage collection, and the CPU went from >300% to ~40%, and memory usage
-went from ~8GB to ~.7GB, but still saw the process getting killed. In the end, since
-this is a one-off script and idempotent, I added the process multiple times to ensure
-all images were processed. This could definitely be improved upon.
-'
+
+# Below is an ugly hack, because the process kept getting killed. I slowed it down,
+# tried manual garbage collection, and the CPU went from >300% to ~40%, and memory usage
+# went from ~8GB to ~4GB, but still saw the process getting killed. In the end, since
+# this is a one-off script and idempotent, I added the process multiple times to ensure
+# all images were processed. This could definitely be improved upon.
+
 python manage.py processimages
 python manage.py processimages
 python manage.py processimages

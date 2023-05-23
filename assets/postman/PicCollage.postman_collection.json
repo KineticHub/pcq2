@@ -1,0 +1,201 @@
+{
+	"info": {
+		"_postman_id": "30407d2a-ab83-416b-8642-1cde43fc139e",
+		"name": "PicCollage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "337034"
+	},
+	"item": [
+		{
+			"name": "counters_digits",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"user-agent": true,
+					"accept": true,
+					"connection": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:8000/api/counter/?digit=7&n=1000",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"counter",
+						""
+					],
+					"query": [
+						{
+							"key": "digit",
+							"value": "7"
+						},
+						{
+							"key": "n",
+							"value": "1000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sticker_search",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"user-agent": true,
+					"accept": true,
+					"connection": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:8000/api/search/?query=cat+in+a+park",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"search",
+						""
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "cat+in+a+park"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sticker_feedback",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"user-agent": true,
+					"accept": true,
+					"connection": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"feedback\": [\n        {\n            \"query\": \"cat in a park\",\n            \"positive\": [\"COCO_val2014_000000004212.jpg\", \"COCO_val2014_000000001675.jpg\"],\n            \"negative\": [\"COCO_val2014_000000002154.jpg\", \"COCO_val2014_000000000400.jpg\", \"COCO_val2014_000000003711.jpg\"]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8000/api/feedback/",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"feedback",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sticker_statistics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"user-agent": true,
+					"accept": true,
+					"connection": true,
+					"accept-encoding": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Token c4ff38a871dad2069a95ee70305f06d10ee86097",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token c4ff38a871dad2069a95ee70305f06d10ee86097",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"feedback\": {\n        \"good\": [\"234\", \"45\"],\n        \"bad\": [\"123\"]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8000/api/analytics/?query=cat+in+a+park",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"analytics",
+						""
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "cat+in+a+park"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

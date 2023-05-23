@@ -58,6 +58,7 @@ class Command(BaseCommand):
                 buffer.close()
 
             del image_vectors
+            gc.collect()
 
         filepaths = glob(f"{settings.BASE_DIR}/core/ml_models/images/val2014/*.jpg")
 

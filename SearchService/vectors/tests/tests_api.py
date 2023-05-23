@@ -1,6 +1,5 @@
 import json
 import struct
-from io import BytesIO
 
 from django.urls import reverse
 from rest_framework import status

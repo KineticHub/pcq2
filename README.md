@@ -2,7 +2,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/kinetichub/repo_name">
+  <a href="https://github.com/kinetichub/pcq2">
     <img src="assets/images/piccollage.webp" alt="Logo" width="80" height="80">
   </a>
 
@@ -10,15 +10,6 @@
 
   <p align="center">
     Sticker Search and Feedback System
-    <br />
-    <a href="https://github.com/kinetichub/repo_name"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/kinetichub/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/kinetichub/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/kinetichub/repo_name/issues">Request Feature</a>
   </p>
 </div>
 
@@ -42,11 +33,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -60,8 +47,6 @@
 This project is intended for internal review at PicCollage only as a project to evaluate a potential candidate.
 The project is not production-ready as-is.
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `kinetichub`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -70,7 +55,7 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 * [![Django][Django]][Django-url]
 * [![Docker][Docker]][Docker-url]
-* [![SQLite][SQLite]][SQLite-url]
+* [![Postgres][Postgres]][Postgres-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -78,10 +63,6 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 * The Python-based [Django][Django-url] framework was chosen primarily because it is the framework I am most familiar with.
 In addition, it includes a strong toolset (i.e. authentication and ORM) for completing the given task.
-
-* SQLite is used as the database engine for simplicity of setting up the demo project, and avoids the need to create
-a database with actual monetary costs. In addition, a real database would need to have the passwords stored in a 
-proper secrets manager, which is outside the scope of this project.
 
 * The project is split into two services. The first service (SearchService) is for running the search algorithm and 
 returning the results of the machine learning model. The second service (StickerService) is for providing a customer endpoint 
@@ -102,9 +83,16 @@ for sticker searching, customer feedback, and usage analysis by internal admins.
     used with very little development cost. Although we could have built this proxy relationship into a single service, 
     this ensures the decoupling at a higher level.
 
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Design Choices Drawbacks
+
+* Django is a powerful framework, however it does have more complexity and overhead than other lighter frameworks.
+
+* Splitting the service into two services means that there will be **redundancy** in code, more overhead **cost** of supporting a 
+second database and compute machine, as well as increased overall **complexity**.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -126,19 +114,19 @@ Please follow the links below for instructions on installation.
 ### Installation
 
 Everything to get the project up and running locally is included in the Docker Compose and associated Docker files.
+Please note that the initial run will take some time, as it downloads necessary files and does image processing.
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/kinetichub/repo_name.git
+   git clone https://github.com/kinetichub/pcq2.git
    ```
-3. Install NPM packages
+2. Create an `.env` file from the `.env.example` file
    ```sh
-   npm install
+   cp .env.example .env
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. Run the Docker compose file
+   ```sh
+   docker compose up
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -148,43 +136,20 @@ Everything to get the project up and running locally is included in the Docker C
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/kinetichub/repo_name/issues) for a full list of proposed features (and known issues).
+Once the services are running, you can call the endpoints by hitting `http://localhost:8000/` endpoints.
+Under the assets folder, I have included a [Postman](https://www.postman.com/api-platform/api-client/) JSON file. 
+These calls should also work out-of-the-box coupled with the default `.env` file provided. 
+Note that if the token is changed in the `.env` file, then the token will need to be updated in the 
+Authorization section of the statistics request as well.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+K. Alnajar - kalnajar09@gmail.com
 
-Project Link: [https://github.com/kinetichub/repo_name](https://github.com/kinetichub/repo_name)
+Project Link: [https://github.com/kinetichub/pcq2](https://github.com/kinetichub/pcq2)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -192,18 +157,6 @@ Project Link: [https://github.com/kinetichub/repo_name](https://github.com/kinet
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/kinetichub/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/kinetichub/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/kinetichub/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/kinetichub/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/kinetichub/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/kinetichub/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/kinetichub/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/kinetichub/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/kinetichub/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/kinetichub/repo_name/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
 [Django]: https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white
 [Django-url]: https://www.djangoproject.com/
@@ -211,3 +164,5 @@ Project Link: [https://github.com/kinetichub/repo_name](https://github.com/kinet
 [Docker-url]: https://www.docker.com/
 [SQLite]: https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white
 [SQLite-url]: https://www.sqlite.org/index.html
+[Postgres]: https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white
+[Postgres-url]: https://www.postgresql.org/

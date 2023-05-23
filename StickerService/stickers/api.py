@@ -1,7 +1,5 @@
 from django.db.models import F
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.mixins import ListModelMixin
-from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -14,13 +12,14 @@ from stickers.serializers import StickerQuerySerializer, StickerQueryScoreSerial
 
 class StickersSearchView(APIView):
     """
+    Takes a customer query and returns the top ten images based on the searched  text.
+    This is a proxy method for the SearchService, to decouple the ml-model from the primary
+    customer-facing service. We track query usage for later analysis.
     """
     permission_classes = [permissions.AllowAny]
 
     @staticmethod
     def get(request):
-        """
-        """
         query = request.query_params.get('query')
         query_mod, _ = StickerQuery.objects.get_or_create(query=request.query_params.get('query'))
         query_mod.usage = F('usage') + 1
@@ -31,13 +30,14 @@ class StickersSearchView(APIView):
 
 class StickersFeedbackView(APIView):
     """
+    We want to receive feedback from the customer on whether they felt that the
+    images provided matched the search that they gave. We allow for multiple feedbacks
+    at one time for a more flexible interface.
     """
     permission_classes = [permissions.AllowAny]
 
     @staticmethod
     def post(request):
-        """
-        """
         feedbacks = request.data['feedback']
         for fb in feedbacks:
             query_mod = StickerQuery.objects.get(query=fb['query'])
@@ -53,19 +53,19 @@ class StickersFeedbackView(APIView):
                     .get_or_create(sticker=sticker_mod, query=query_mod)
                 feedback_mod.negatives = F('negatives') + 1
                 feedback_mod.save()
-        return Response()
+        return Response({"status": "success"})
 
 
 class StickersStatisticsView(APIView):
     """
+    For internal use only. Provide a mechanism for getting data about the customer feedback
+    received in searches.
     """
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAdminUser]
 
     @staticmethod
     def get(request):
-        """
-        """
         query = request.query_params.get('query')
 
         query_mod = StickerQuery.objects.get(query=query)
